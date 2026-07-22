@@ -1,0 +1,33 @@
+{
+  "paper": "BXE3Z0EHCs",
+  "source_sha256": "6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b",
+  "scope": "Source-pinned finite analytic certificate for polynomial/Pareto and explicit gradient-flow formulas; not a replacement for universal proofs.",
+  "claims": {
+    "C1": {
+      "status": "verified",
+      "polynomial_cells": 18
+    },
+    "C2": {
+      "status": "verified",
+      "pareto_cells": 60
+    },
+    "C3": {
+      "status": "verified",
+      "ntk_scaling_cells": 3
+    },
+    "C4": {
+      "status": "verified",
+      "mean_field_scaling_cells": 6
+    },
+    "C5": {
+      "status": "verified",
+      "nu2_limit_cells": 5
+    },
+    "C6": {
+      "status": "verified",
+      "nu4_rho_star": 0.5920560161706298
+    }
+  },
+  "verified_claims": 6,
+  "falsified_claims": 0
+}

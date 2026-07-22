@@ -1,0 +1,8 @@
+{
+  "paper": "BXE3Z0EHCs",
+  "gate": "passed",
+  "tests_passed": true,
+  "publication_gate_passed": true,
+  "verified_claims": 6,
+  "scope": "Source-pinned finite analytic certificate for polynomial/Pareto and explicit gradient-flow formulas; not a replacement for universal proofs."
+}

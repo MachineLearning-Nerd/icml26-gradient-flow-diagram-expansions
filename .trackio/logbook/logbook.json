@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "title": "Repro - Gradient Flow Through Diagram Expansions",
+  "emoji": "🎯",
+  "space_id": null,
+  "paper": null,
+  "tags": [],
+  "updated_at": "2026-07-22T13:03:02+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Repro - Gradient Flow Through Diagram Expansions",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "overview",
+        "title": "Overview",
+        "file": "pages/overview/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c1-polynomial-coefficients",
+        "title": "Claim C1 — polynomial coefficients",
+        "file": "pages/claim-c1-polynomial-coefficients/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c2-pareto-terms",
+        "title": "Claim C2 — Pareto terms",
+        "file": "pages/claim-c2-pareto-terms/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c3-ntk-regime",
+        "title": "Claim C3 — NTK regime",
+        "file": "pages/claim-c3-ntk-regime/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c4-mean-field-scaling",
+        "title": "Claim C4 — mean-field scaling",
+        "file": "pages/claim-c4-mean-field-scaling/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c5-nu-2-solution",
+        "title": "Claim C5 — nu=2 solution",
+        "file": "pages/claim-c5-nu-2-solution/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c6-nu-4-threshold",
+        "title": "Claim C6 — nu=4 threshold",
+        "file": "pages/claim-c6-nu-4-threshold/page.md",
+        "children": []
+      },
+      {
+        "slug": "methods",
+        "title": "Methods",
+        "file": "pages/methods/page.md",
+        "children": []
+      },
+      {
+        "slug": "negative-controls",
+        "title": "Negative controls",
+        "file": "pages/negative-controls/page.md",
+        "children": []
+      },
+      {
+        "slug": "tests-and-gate",
+        "title": "Tests and gate",
+        "file": "pages/tests-and-gate/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 1248,
+  "revision": "1784725382207160965"
+}
