@@ -4,4 +4,6 @@
 - Scope: source-pinned finite analytic checks of the six theorem/closed-form anchors; no author executable release exists.
 - Completed: six-claim analytic verifier passes polynomial/Pareto, scaling, ν=2, and ν=4 threshold certificates.
 - Completed: test, fail-closed gate, and Trackio evidence with clean relative command capture and pinned conclusion.
-- Next: secret scan, public GitHub handoff, then canonical backlog handoff.
+- Completed: secret scan and public GitHub handoff at commit `66f78e5`.
+- FULL_GATE_READY: BXE3Z0EHCs
+- Next: canonical backlog handoff through the shared publisher.
