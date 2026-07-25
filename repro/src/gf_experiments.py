@@ -31,8 +31,11 @@ def _narayana(n, k):
 # Precompute series coefficients of h(z,y) = sum_m c_m(y) z^m up to order M,
 # where c_m(y) = sum_{n=1}^{m+1} N(m+1, n) y^n.  Used to stabilise h, h_z near
 # z=0 where the closed form suffers catastrophic cancellation.
-_MSER = 9
+_MSER = 13
 _SER_C = [[_narayana(m + 1, n) for n in range(1, m + 2)] for m in range(_MSER + 1)]
+# Switch to series only for very small |z| (where the closed form suffers
+# catastrophic cancellation); the closed form is stable for |z| >= ~0.05.
+_SER_THRESH = 0.05
 
 
 def _h_series(z, y, deriv=0):
@@ -52,7 +55,7 @@ def _h_series(z, y, deriv=0):
 def _h(z, y):
     z = np.asarray(z, dtype=float)
     closed = (1 - z * (y + 1) - np.sqrt(1 - 2 * z * (y + 1) + z ** 2 * (y - 1) ** 2)) / (2 * z ** 2 + 1e-300)
-    out = np.where(np.abs(z) < 0.2, _h_series(z, y, 0), closed)
+    out = np.where(np.abs(z) < _SER_THRESH, _h_series(z, y, 0), closed)
     return out
 
 
@@ -62,7 +65,7 @@ def _h_z(z, y):
     sp = (-(y + 1) + z * (y - 1) ** 2) / s
     num = (-(y + 1) - sp) * 2 * z ** 2 - (1 - z * (y + 1) - s) * 4 * z
     closed = num / (4 * z ** 4)
-    out = np.where(np.abs(z) < 0.2, _h_series(z, y, 1), closed)
+    out = np.where(np.abs(z) < _SER_THRESH, _h_series(z, y, 1), closed)
     return out
 
 
