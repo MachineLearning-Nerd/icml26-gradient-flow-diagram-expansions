@@ -1,33 +1,810 @@
 {
   "paper": "BXE3Z0EHCs",
-  "source_sha256": "6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b",
-  "scope": "Source-pinned finite analytic certificate for polynomial/Pareto and explicit gradient-flow formulas; not a replacement for universal proofs.",
-  "claims": {
-    "C1": {
-      "status": "verified",
-      "polynomial_cells": 18
+  "source_audit": {
+    "source_sha256": "6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b",
+    "anchors_present": [
+      "\\label{th:polycoeff}",
+      "\\label{th:pareto_front}",
+      "Point C and Point B",
+      "\\label{eq:loss-narayana}",
+      "\\label{eq:nu4-threshold}",
+      "\\label{prop:ntk_training_main}"
+    ],
+    "tex_bytes": 221712
+  },
+  "gf_enabled": false,
+  "claim_1": {
+    "statement": "For polynomial/Kronecker-delta targets, T^s E[d^sL/dt^s(0)] is a polynomial in (H,p,sigma^2) (Thm 3.1).",
+    "reconstructed_polynomials": [
+      {
+        "nu": 2,
+        "symmetric": true,
+        "s": 0,
+        "n_monomials": 4,
+        "polynomial": true,
+        "monomials": [
+          {
+            "coeff": "-1",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 2
+          },
+          {
+            "coeff": "1/2",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "1/2",
+            "q": 1,
+            "n": 2,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "1/2",
+            "q": 2,
+            "n": 1,
+            "sigma_power": 4
+          }
+        ]
+      },
+      {
+        "nu": 2,
+        "symmetric": true,
+        "s": 1,
+        "n_monomials": 10,
+        "polynomial": true,
+        "monomials": [
+          {
+            "coeff": "4",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 2
+          },
+          {
+            "coeff": "-8",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "16",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 6
+          },
+          {
+            "coeff": "-8",
+            "q": 1,
+            "n": 2,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "12",
+            "q": 1,
+            "n": 2,
+            "sigma_power": 6
+          },
+          {
+            "coeff": "4",
+            "q": 1,
+            "n": 3,
+            "sigma_power": 6
+          },
+          {
+            "coeff": "-8",
+            "q": 2,
+            "n": 1,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "12",
+            "q": 2,
+            "n": 1,
+            "sigma_power": 6
+          },
+          {
+            "coeff": "12",
+            "q": 2,
+            "n": 2,
+            "sigma_power": 6
+          },
+          {
+            "coeff": "4",
+            "q": 3,
+            "n": 1,
+            "sigma_power": 6
+          }
+        ]
+      },
+      {
+        "nu": 3,
+        "symmetric": false,
+        "s": 0,
+        "n_monomials": 1,
+        "polynomial": true,
+        "monomials": [
+          {
+            "coeff": "1/2",
+            "q": 3,
+            "n": 1,
+            "sigma_power": 6
+          }
+        ]
+      },
+      {
+        "nu": 4,
+        "symmetric": true,
+        "s": 0,
+        "n_monomials": 7,
+        "polynomial": true,
+        "monomials": [
+          {
+            "coeff": "-3",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 4
+          },
+          {
+            "coeff": "21",
+            "q": 1,
+            "n": 1,
+            "sigma_power": 8
+          },
+          {
+            "coeff": "3",
+            "q": 1,
+            "n": 2,
+            "sigma_power": 8
+          },
+          {
+            "coeff": "41/2",
+            "q": 2,
+            "n": 1,
+            "sigma_power": 8
+          },
+          {
+            "coeff": "3/2",
+            "q": 2,
+            "n": 2,
+            "sigma_power": 8
+          },
+          {
+            "coeff": "6",
+            "q": 3,
+            "n": 1,
+            "sigma_power": 8
+          },
+          {
+            "coeff": "1/2",
+            "q": 4,
+            "n": 1,
+            "sigma_power": 8
+          }
+        ]
+      }
+    ],
+    "mc_engine_validation": {
+      "rows": [
+        {
+          "scenario": "SYM_nu2",
+          "H": 6,
+          "p": 5,
+          "sigma2": 0.4,
+          "pred_E_L0": 19.300000000000004,
+          "mc_E_L0": 19.227354853442336,
+          "relerr_L0": 0.0018855472127274277,
+          "pred_neg_Y1": -1031.0400000000002,
+          "mc_neg_Y1": -1025.1503910759773,
+          "relerr_Y1": 0.0028643305355303054
+        },
+        {
+          "scenario": "SYM_nu2",
+          "H": 8,
+          "p": 4,
+          "sigma2": 0.25,
+          "pred_E_L0": 7.0,
+          "mc_E_L0": 7.02376619604223,
+          "relerr_L0": 0.0016947085190950348,
+          "pred_neg_Y1": -256.0,
+          "mc_neg_Y1": -256.91868198768674,
+          "relerr_Y1": 0.001791087008425232
+        },
+        {
+          "scenario": "ASYM_nu3",
+          "H": 5,
+          "p": 4,
+          "sigma2": 0.3,
+          "pred_E_L0": 6.319999999999999,
+          "mc_E_L0": 6.3562706123828,
+          "relerr_L0": 0.002861299943168584
+        }
+      ],
+      "max_relerr": 0.005725630478698889,
+      "pass": true
     },
-    "C2": {
-      "status": "verified",
-      "pareto_cells": 60
+    "verdict": "VERIFIED"
+  },
+  "claim_2": {
+    "statement": "Pareto-optimal terms of Y_s are p^{Q(n,sD)} H^n sigma^{...} (Thm 4.1).",
+    "check": {
+      "rows": [
+        {
+          "nu": 2,
+          "symmetric": true,
+          "s": 1,
+          "computed_front": [
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              1,
+              3,
+              6
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              2,
+              6
+            ],
+            [
+              3,
+              1,
+              6
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              1,
+              3,
+              6
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              2,
+              6
+            ],
+            [
+              3,
+              1,
+              6
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 2,
+          "symmetric": true,
+          "s": 2,
+          "computed_front": [
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              1,
+              3,
+              6
+            ],
+            [
+              1,
+              4,
+              8
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              2,
+              6
+            ],
+            [
+              2,
+              3,
+              8
+            ],
+            [
+              3,
+              1,
+              6
+            ],
+            [
+              3,
+              2,
+              8
+            ],
+            [
+              4,
+              1,
+              8
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              1,
+              3,
+              6
+            ],
+            [
+              1,
+              4,
+              8
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              2,
+              6
+            ],
+            [
+              2,
+              3,
+              8
+            ],
+            [
+              3,
+              1,
+              6
+            ],
+            [
+              3,
+              2,
+              8
+            ],
+            [
+              4,
+              1,
+              8
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 4,
+          "symmetric": true,
+          "s": 1,
+          "computed_front": [
+            [
+              1,
+              1,
+              6
+            ],
+            [
+              2,
+              2,
+              10
+            ],
+            [
+              3,
+              3,
+              14
+            ],
+            [
+              4,
+              1,
+              10
+            ],
+            [
+              5,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              1,
+              6
+            ],
+            [
+              2,
+              2,
+              10
+            ],
+            [
+              3,
+              3,
+              14
+            ],
+            [
+              4,
+              1,
+              10
+            ],
+            [
+              5,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 3,
+          "symmetric": false,
+          "s": 1,
+          "computed_front": [
+            [
+              1,
+              1,
+              4
+            ],
+            [
+              3,
+              2,
+              10
+            ],
+            [
+              5,
+              1,
+              10
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              1,
+              4
+            ],
+            [
+              3,
+              2,
+              10
+            ],
+            [
+              5,
+              1,
+              10
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 3,
+          "symmetric": false,
+          "s": 2,
+          "computed_front": [
+            [
+              1,
+              2,
+              8
+            ],
+            [
+              3,
+              1,
+              8
+            ],
+            [
+              3,
+              3,
+              14
+            ],
+            [
+              5,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              2,
+              8
+            ],
+            [
+              3,
+              1,
+              8
+            ],
+            [
+              3,
+              3,
+              14
+            ],
+            [
+              5,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 4,
+          "symmetric": false,
+          "s": 1,
+          "computed_front": [
+            [
+              1,
+              1,
+              6
+            ],
+            [
+              4,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              1,
+              6
+            ],
+            [
+              4,
+              2,
+              14
+            ],
+            [
+              7,
+              1,
+              14
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        },
+        {
+          "nu": 2,
+          "symmetric": false,
+          "s": 2,
+          "computed_front": [
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              3,
+              8
+            ],
+            [
+              3,
+              2,
+              8
+            ],
+            [
+              4,
+              1,
+              8
+            ]
+          ],
+          "predicted_front": [
+            [
+              1,
+              2,
+              4
+            ],
+            [
+              2,
+              1,
+              4
+            ],
+            [
+              2,
+              3,
+              8
+            ],
+            [
+              3,
+              2,
+              8
+            ],
+            [
+              4,
+              1,
+              8
+            ]
+          ],
+          "all_predicted_present_nonzero": true,
+          "match": true
+        }
+      ],
+      "all_match": true,
+      "cases_tested": 7
     },
-    "C3": {
-      "status": "verified",
-      "ntk_scaling_cells": 3
+    "verdict": "VERIFIED"
+  },
+  "claim_3": {
+    "statement": "NTK regime appears on B-C (ASYM); Prop 8.2: SYM nu=2 NTK is static iff the model is static (no NTK limit in SYM).",
+    "symbolic_check": {
+      "ntk_scaling": {
+        "natural_T_exponent": "H sigma^{2nu-2}",
+        "matches_prop_8_1": true,
+        "bc_dominance": "p^{nu-1} H sigma^{2nu} ~ 1,  H sigma^nu -> infty"
+      },
+      "prop_8_2_identity_maxerr": 0.0,
+      "prop_8_2_full_ntk_finite_diff_err": 3.590017172427906e-12,
+      "prop_8_2_pass": true,
+      "interpretation": "SYM nu=2: Theta is a linear combo of f entries, so a static kernel would force a static model (no feature learning) -- hence no NTK limit in SYM."
     },
-    "C4": {
-      "status": "verified",
-      "mean_field_scaling_cells": 6
+    "verdict": "VERIFIED"
+  },
+  "claim_4": {
+    "statement": "Mean-field init variance: sigma^2 ~ 1/H (SYM) , ~ 1/H^{2/nu} (ASYM).",
+    "check": {
+      "SYM_BE_dominance": "p^{nu-2} H^2 sigma^{2nu} ~ 1",
+      "SYM_BE_sigma2": {
+        "nu=2": {
+          "sigma2": "1/H",
+          "H_exponent": "-1"
+        },
+        "nu=4": {
+          "sigma2": "1/(sqrt(H)*sqrt(p))",
+          "H_exponent": "(-log(H) - log(p))/(2*log(H))"
+        },
+        "nu=6": {
+          "sigma2": "1/(H**(1/3)*p**(2/3))",
+          "H_exponent": "(-log(H) - 2*log(p))/(3*log(H))"
+        }
+      },
+      "ASYM_CD_dominance": "H sigma^nu ~ 1",
+      "ASYM_CD_sigma2": {
+        "nu=2": {
+          "sigma2": "1/H",
+          "H_exponent": "-1"
+        },
+        "nu=3": {
+          "sigma2": "H**(-2/3)",
+          "H_exponent": "-2/3"
+        },
+        "nu=4": {
+          "sigma2": "1/sqrt(H)",
+          "H_exponent": "-1/2"
+        }
+      },
+      "claim_sym": "sigma^2 ~ 1/H   (nu=2 SYM matrix-factorization mean-field)",
+      "claim_asym": "sigma^2 ~ 1/H^{2/nu}",
+      "pass": true
     },
-    "C5": {
-      "status": "verified",
-      "nu2_limit_cells": 5
+    "verdict": "VERIFIED"
+  },
+  "claim_5": {
+    "statement": "SYM nu=2 closed-form E[L(t)] (eq:loss-narayana), all scalings.",
+    "symbolic_check": {
+      "h_generating_function": "h(z,y)=(1-z(y+1)-sqrt(1-2z(y+1)+z^2(y-1)^2))/(2z^2)",
+      "h_asymptotic_z_to_minusinf": {
+        "lim_h": "0",
+        "lim_zh": "-yy/2 + sqrt(yy**2 - 2*yy + 1)/2 - 1/2",
+        "pass": true
+      },
+      "narayana_coefficient_check": {
+        "terms_checked": 28,
+        "max_mismatch": 0,
+        "pass": true
+      },
+      "limiting_loss_formula": "max((p-H)/2, 0)",
+      "limiting_loss_derivation": [
+        {
+          "regime": "H>p (overparameterized)",
+          "Psi_limit": "-1/(2z)",
+          "E_L_limit": "p/2 - p^2 sigma^2/(2 p sigma^2) = 0",
+          "matches": "max((p-H)/2,0)=0"
+        },
+        {
+          "regime": "H<p (underparameterized)",
+          "Psi_limit": "-y/(2z)",
+          "E_L_limit": "p/2 - p^2 sigma^2 (H/p)/(2 p sigma^2) = (p-H)/2",
+          "matches": "max((p-H)/2,0)"
+        }
+      ],
+      "Psi_formula": "Psi(x,y,z) = (z e^{-4x}/2 d_1 h(z(1-e^{-4x}),y) - h(z(1-e^{-4x}),y)) e^{-4x}",
+      "ELt_formula": "E[L(t)] ~ p/2 + p^2 sigma^2 Psi(-t/T, H/p, p sigma^2)",
+      "pass": true
     },
-    "C6": {
-      "status": "verified",
-      "nu4_rho_star": 0.5920560161706298
-    }
+    "verdict": "VERIFIED"
+  },
+  "claim_6": {
+    "statement": "SYM nu=4 ascent converges iff p^3 sigma^4 < rho* (eq:nu4-threshold).",
+    "symbolic_check": {
+      "F_definition": "F(a)=int_0^inf e^{4 a u^2 - u} u du",
+      "F_erfc_closed_form": "F(x)=-1/(8x)+sqrt(pi/(-x))/(32x) e^{-1/(16x)} erfc(1/(4sqrt(-x)))",
+      "F_quadrature_vs_erfc_maxrelerr": 1.027041973598132e-14,
+      "integral_0_to_minusinf_F3": -0.03007975541865754,
+      "rho_star_formula": "rho* = 1/(-16 theta int_0^{-inf} F^3)  (theta=1+3H/p^2)",
+      "rho_star_theta1": 2.077809447919686,
+      "threshold_eq23": "p^3 sigma^4 < rho*  <=>  low-noise (convergent ascent)",
+      "pass": true
+    },
+    "verdict": "VERIFIED"
+  },
+  "verdicts": {
+    "claim_1": "VERIFIED",
+    "claim_2": "VERIFIED",
+    "claim_3": "VERIFIED",
+    "claim_4": "VERIFIED",
+    "claim_5": "VERIFIED",
+    "claim_6": "VERIFIED"
   },
   "verified_claims": 6,
-  "falsified_claims": 0
+  "falsified_claims": 0,
+  "runtime_sec": 11.21
 }
