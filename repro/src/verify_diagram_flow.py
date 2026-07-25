@@ -118,8 +118,11 @@ def main():
     # ---- Optional numerical GF corroboration (claims 3b, 5, 6) ----
     if GF_ENABLED:
         import gf_experiments as gf
+        print("[gate] running GF corroboration: claim5 (SYM nu=2 loss curve)...", flush=True)
         results["gf_claim_5"] = gf.claim5_numerical(str(ROOT / "outputs/gf"))
+        print("[gate] GF claim3b (SYM nu=2 NTK drift)...", flush=True)
         results["gf_claim_3b"] = gf.claim3b_numerical(str(ROOT / "outputs/gf"))
+        print("[gate] GF claim6 (SYM nu=4 ascent boundary)...", flush=True)
         results["gf_claim_6"] = gf.claim6_numerical(str(ROOT / "outputs/gf"))
 
     verdicts = {k: results[k]["verdict"] for k in
