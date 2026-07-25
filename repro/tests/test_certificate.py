@@ -55,7 +55,7 @@ def test_verifier_writes_six_verified_claims():
     with tempfile.TemporaryDirectory() as d:
         out = Path(d) / "v.json"
         subprocess.run([sys.executable, "repro/src/verify_diagram_flow.py",
-                        "--output", str(out)], cwd=ROOT, check=True)
+                        "--no-gf", "--output", str(out)], cwd=ROOT, check=True)
         v = json.loads(out.read_text())
         assert v["verified_claims"] == 6 and v["falsified_claims"] == 0
         assert all(x == "VERIFIED" for x in v["verdicts"].values())

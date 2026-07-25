@@ -51,7 +51,10 @@ def main():
     from run_config import GF_ENABLED
     p = argparse.ArgumentParser()
     p.add_argument("--output", type=Path, default=ROOT / "outputs/verification.json")
+    p.add_argument("--no-gf", action="store_true",
+                   help="override run_config and skip the numerical GF corroboration")
     args = p.parse_args()
+    GF_ENABLED = GF_ENABLED and not args.no_gf
 
     t0 = time.time()
     audit = source_audit()
