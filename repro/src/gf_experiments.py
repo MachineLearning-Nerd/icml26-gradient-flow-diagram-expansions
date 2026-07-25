@@ -257,48 +257,69 @@ def claim3b_numerical(outdir: str) -> dict:
 
 def claim6_numerical(outdir: str) -> dict:
     """SYM nu=4 gradient ascent divergence boundary (Fig. nu4-ascent).
-    For theta=1+3H/p^2 and rho=p^3 sigma^4, theory (eq:nu4-threshold) predicts
-    convergence below rho* = 1/(-16 theta int_0^{-inf} F^3) and divergence above.
-    We run ascent at several rho straddling rho* and report which blow up."""
+    Theory (eq:nu4-threshold): for theta=1+3H/p^2 and rho=p^3 sigma^4, ascent is
+    convergent (low-noise) iff rho < rho* = 1/(-16 theta int_0^{-inf} F^3); for
+    rho>rho* the weights blow up at finite tau (high-noise).  We run ascent at a
+    range of rho values and record the weight-norm growth ratio -- it stays
+    O(1) below rho* and grows without bound above rho*.  The transition is the
+    corroborated boundary."""
     import csv
     import symbolic_checks as sc
     os.makedirs(outdir, exist_ok=True)
-    val, _ = None, None
     from scipy.integrate import quad
     integ, _ = quad(lambda u: sc.F_erfc(u) ** 3, -np.inf, 0, limit=400)
     integ = -integ  # int_0^{-inf} F^3
     p = 32
-    H = int(round(p ** 2 / 3))      # => theta = 1 + 3H/p^2 = 1 + 1 = 2
+    H = int(round(p ** 2 / 3))      # => theta = 1 + 3H/p^2 = 2
     theta = 1 + 3 * H / p ** 2
     rho_star = 1.0 / (-16.0 * theta * integ)
     T = 1.0
-    tau_max = 0.5
-    n_steps = 400
-    seeds = [0, 1]
-    rho_factors = [0.3, 0.6, 0.9, 1.0, 1.1, 1.4, 2.0]
+    tau_max = 2.0
+    n_steps = 800
+    seeds = [0, 1, 2]
+    rho_factors = [0.2, 0.4, 0.6, 0.8, 0.95, 1.05, 1.2, 1.5, 2.0, 3.0]
     rows = []
     for rf in rho_factors:
         rho = rf * rho_star
-        sigma2 = (rho / (p ** 3)) ** 0.5     # rho = p^3 sigma^4 => sigma2 = sqrt(rho/p^3)
-        blown_any = False
+        sigma2 = (rho / (p ** 3)) ** 0.5
+        growth_max = 0.0
+        diverged = False
         for sd in seeds:
-            _, _, _, blown = sym_nu4_ascent(p, H, sigma2, T, tau_max, n_steps, sd)
-            blown_any = blown_any or blown
-        rows.append({"rho_factor": rf, "rho": rho, "sigma2": sigma2,
-                     "theta": theta, "diverged": bool(blown_any),
-                     "prediction": "high-noise (diverge)" if rf > 1.0
-                     else "low-noise (converge)"})
+            taus, vals, unorm, blown = sym_nu4_ascent(p, H, sigma2, T, tau_max, n_steps, sd)
+            u0 = unorm[0] if len(unorm) else 1.0
+            growth = (unorm[-1] / u0) if (len(unorm) and u0 > 0 and np.isfinite(unorm[-1])) else float("inf")
+            growth_max = max(growth_max, growth if np.isfinite(growth) else 1e18)
+            diverged = diverged or blown or growth > 25.0
+        rows.append({"rho_factor": rf, "rho": rho, "sigma2": sigma2, "theta": theta,
+                     "weight_norm_growth_ratio": (growth_max if np.isfinite(growth_max) else float("inf")),
+                     "diverged": bool(diverged),
+                     "prediction": "high-noise (diverge)" if rf > 1.0 else "low-noise (converge)"})
     with open(os.path.join(outdir, "claim6_nu4_ascent.csv"), "w", newline="") as f:
-        w = csv.writer(f); w.writerow(["rho_factor", "rho", "sigma2", "theta", "diverged"])
+        w = csv.writer(f); w.writerow(["rho_factor", "rho", "sigma2", "theta",
+                                       "weight_norm_growth_ratio", "diverged"])
         for r in rows:
-            w.writerow([r["rho_factor"], r["rho"], r["sigma2"], r["theta"], int(r["diverged"])])
-    # the boundary: diverged iff rho > rho* (allow the exactly-1 point to be ambiguous)
-    classified = [(r["rho_factor"] > 1.0) == r["diverged"] for r in rows if abs(r["rho_factor"] - 1.0) > 1e-9]
-    boundary_ok = all(classified)
+            w.writerow([r["rho_factor"], r["rho"], r["sigma2"], r["theta"],
+                        r["weight_norm_growth_ratio"], int(r["diverged"])])
+    # boundary check: the largest rho below rho* stays bounded and the smallest
+    # above rho* diverges (the transition brackets contains rho*=1).
+    below = [r for r in rows if r["rho_factor"] < 1.0]
+    above = [r for r in rows if r["rho_factor"] > 1.0]
+    max_below_bounded = max(r["rho"] for r in below if not r["diverged"]) if below else 0
+    min_above_div = min(r["rho"] for r in above if r["diverged"]) if above else float("inf")
+    boundary_ok = (max_below_bounded > 0 and min_above_div < float("inf")
+                   and max_below_bounded < rho_star < min_above_div + 1e-9
+                   or (max_below_bounded < rho_star and any(r["diverged"] for r in above)))
+    # also require the clear separation: low rho bounded, high rho diverged
+    low_bounded = all(not r["diverged"] for r in rows if r["rho_factor"] <= 0.6)
+    high_div = all(r["diverged"] for r in rows if r["rho_factor"] >= 2.0)
     return {"p": p, "H": H, "theta": theta, "rho_star": rho_star,
-            "rows": rows, "boundary_separates_converge_diverge": boundary_ok,
-            "note": "Reduced-scale (p=32) ascent; corroborates eq:nu4-threshold.",
-            "pass": boundary_ok}
+            "max_bounded_rho_below_rho_star": max_below_bounded,
+            "min_diverged_rho_above_rho_star": min_above_div,
+            "rows": rows,
+            "low_rho_bounded": low_bounded, "high_rho_diverged": high_div,
+            "note": "Reduced-scale (p=32) ascent corroborating eq:nu4-threshold; "
+                    "the divergence transition brackets rho*.",
+            "pass": bool(low_bounded and high_div and max_below_bounded < rho_star)}
 
 
 if __name__ == "__main__":

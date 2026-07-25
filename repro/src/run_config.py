@@ -4,4 +4,4 @@ corroboration runs (it is heavy: multi-core CPU).  The baseline keeps it off
 is the only knob that varies between experiment nodes -- the run command is
 identical everywhere (cardinal rule: vary code, not the command)."""
 
-GF_ENABLED = False
+GF_ENABLED = True
