@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "title": "Repro - Gradient Flow Through Diagram Expansions",
+  "emoji": "\ud83c\udfaf",
+  "space_id": "DineshAI/BXE3Z0EHCs",
+  "root": {
+    "slug": "index",
+    "title": "Repro",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "overview",
+        "title": "Overview",
+        "file": "pages/overview/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c1-polynomial-coefficients",
+        "title": "Claim C1 \u2014 polynomial coefficients",
+        "file": "pages/claim-c1-polynomial-coefficients/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c2-pareto-terms",
+        "title": "Claim C2 \u2014 Pareto terms",
+        "file": "pages/claim-c2-pareto-terms/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c3-ntk-regime",
+        "title": "Claim C3 \u2014 NTK regime",
+        "file": "pages/claim-c3-ntk-regime/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c4-mean-field-scaling",
+        "title": "Claim C4 \u2014 mean-field scaling",
+        "file": "pages/claim-c4-mean-field-scaling/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c5-nu-2-solution",
+        "title": "Claim C5 \u2014 nu=2 solution",
+        "file": "pages/claim-c5-nu-2-solution/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-c6-nu-4-threshold",
+        "title": "Claim C6 \u2014 nu=4 threshold",
+        "file": "pages/claim-c6-nu-4-threshold/page.md",
+        "children": []
+      },
+      {
+        "slug": "methods",
+        "title": "Methods",
+        "file": "pages/methods/page.md",
+        "children": []
+      },
+      {
+        "slug": "negative-controls",
+        "title": "Negative controls",
+        "file": "pages/negative-controls/page.md",
+        "children": []
+      },
+      {
+        "slug": "tests-and-gate",
+        "title": "Tests and gate",
+        "file": "pages/tests-and-gate/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      },
+      {
+        "slug": "historical/index",
+        "title": "Historical rejected baseline",
+        "file": "pages/historical/index/page.md",
+        "children": []
+      }
+    ]
+  }
+}

@@ -1,55 +1,147 @@
+"""Source-pinned verifier for arXiv:2602.04548 (OpenReview BXE3Z0EHCs).
+
+Runs the six claim checks (independent symbolic reconstruction of the diagram
+calculus, Pareto front, NTK relations, nu=2 closed form, nu=4 threshold) and,
+when GF_ENABLED is set in repro/src/run_config.py, the numerical gradient-flow
+corroboration.  Writes outputs/verification.json and exits nonzero on failure.
+
+Source pin: the arXiv source tarball is hashed and key theorem/section anchors
+are asserted present, so the check is tied to the exact paper revision.
+"""
+
 from __future__ import annotations
-import argparse, hashlib, json, math, tarfile
+import argparse
+import hashlib
+import json
+import sys
+import tarfile
+import time
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[2]
-ARC=ROOT/'source/arxiv-2602.04548.tar'
-SHA='6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b'
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-def q(n,sd,nu,symmetric):
- return 1+(nu-1)*sd-nu*(n-1)/2 if symmetric else 1+(nu-1)*(sd+1-n)
+ARC = ROOT / "source/arxiv-2602.04548.tar"
+SHA = "6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b"
+# anchors that must appear in the paper source (theorem/eq labels & section refs)
+ANCHORS = [
+    "\\label{th:polycoeff}",     # Theorem 3.1
+    "\\label{th:pareto_front}",  # Theorem 4.1
+    "Point C and Point B",       # NTK discussion (Sec. 5/8)
+    "\\label{eq:loss-narayana}", # nu=2 closed form (Sec. 9)
+    "\\label{eq:nu4-threshold}", # nu=4 threshold (Sec. 10)
+    "\\label{prop:ntk_training_main}",  # Prop 8.1 (ASYM NTK)
+]
 
-def f(a):
- # F(a)=integral exp(4*a*u^2-u)u du, stable for a <= 0.
- h=.002; total=0.; u=0.
- while u<28:
-  total += math.exp(4*a*u*u-u)*u*h; u+=h
- return total
+
+def source_audit() -> dict:
+    got = hashlib.sha256(ARC.read_bytes()).hexdigest()
+    assert got == SHA, f"source SHA mismatch: {got} != {SHA}"
+    with tarfile.open(ARC) as z:
+        tex = z.extractfile("camera_ready.tex").read().decode()
+    for tok in ANCHORS:
+        assert tok in tex, f"missing source anchor: {tok}"
+    return {"source_sha256": got, "anchors_present": ANCHORS,
+            "tex_bytes": len(tex)}
+
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=ROOT/'outputs/verification.json');a=p.parse_args()
- assert hashlib.sha256(ARC.read_bytes()).hexdigest()==SHA
- with tarfile.open(ARC) as z:t=z.extractfile('camera_ready.tex').read().decode()
- for token in ['\\label{th:polycoeff}','\\label{th:pareto_front}','Point C and Point B','\\label{eq:loss-narayana}','\\label{eq:nu4-threshold}']: assert token in t
- # C1: polynomial monomial evaluation is closed under H,p,sigma substitutions.
- cells=0
- for H in (2,5,11):
-  for P in (3,7):
-   for s2 in (.01,.1,1.):
-    val=3*P**2*H*s2 + 2*P*H**2*s2**2
-    assert math.isfinite(val);cells+=1
- # C2: Eq. pareto_terms has no dominated (q,n) pair at fixed s_D in SYM even nu.
- pareto=0
- for nu in (2,4,6):
-  for sd in range(1,6):
-   pts=[(q(n,sd,nu,True),n) for n in range(1,sd+2)]
-   assert len(set(pts))==len(pts) and all(x[0]>y[0] for x,y in zip(pts,pts[1:]));pareto+=len(pts)
- # C3/C4: explicit NTK and mean-field scalings, with feature-evolving variance scaling.
- for H in (16,64,256):
-  assert abs(H*(1/H)-1)<1e-12
-  assert abs((H**(2/4))*(H**(-2/4))-1)<1e-12
- # C5: stated nu=2 closed-form limiting loss max((p-H)/2,0).
- limits=[]
- for P,H in ((4,2),(4,4),(4,7),(12,3),(12,16)):
-  limits.append(max((P-H)/2,0));assert limits[-1]>=0
- # C6: calculate finite negative-a integral and verify low/high noise split around Eq.23 threshold.
- integral=0.;step=.02;a0=-16.
- x=a0
- while x<0:
-  integral += f(x)**3*step;x+=step
- theta=1+3*.5
- rho_star=(-16*theta*(-integral))**-1
- assert rho_star>0 and .5*rho_star<rho_star<2*rho_star
- out={'paper':'BXE3Z0EHCs','source_sha256':SHA,'scope':'Source-pinned finite analytic certificate for polynomial/Pareto and explicit gradient-flow formulas; not a replacement for universal proofs.','claims':{'C1':{'status':'verified','polynomial_cells':cells},'C2':{'status':'verified','pareto_cells':pareto},'C3':{'status':'verified','ntk_scaling_cells':3},'C4':{'status':'verified','mean_field_scaling_cells':6},'C5':{'status':'verified','nu2_limit_cells':len(limits)},'C6':{'status':'verified','nu4_rho_star':rho_star}},'verified_claims':6,'falsified_claims':0}
- a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
-if __name__=='__main__':main()
+    import symbolic_checks as sc
+    import diagrams as dg
+    from run_config import GF_ENABLED
+    p = argparse.ArgumentParser()
+    p.add_argument("--output", type=Path, default=ROOT / "outputs/verification.json")
+    p.add_argument("--no-gf", action="store_true",
+                   help="override run_config and skip the numerical GF corroboration")
+    args = p.parse_args()
+    GF_ENABLED = GF_ENABLED and not args.no_gf
+
+    t0 = time.time()
+    audit = source_audit()
+
+    results = {"paper": "BXE3Z0EHCs", "source_audit": audit, "gf_enabled": GF_ENABLED}
+
+    # ---- Claim 1: Theorem 3.1 polynomiality + MC cross-check of the engine ----
+    c1_poly = [sc.claim1_polynomial(nu, sym, s)
+               for (nu, sym, s) in [(2, True, 0), (2, True, 1), (3, False, 0), (4, True, 0)]]
+    c1_mc = sc.claim1_mc_crosscheck()
+    results["claim_1"] = {
+        "statement": "For polynomial/Kronecker-delta targets, T^s E[d^sL/dt^s(0)] is a "
+                     "polynomial in (H,p,sigma^2) (Thm 3.1).",
+        "reconstructed_polynomials": c1_poly,
+        "mc_engine_validation": c1_mc,
+        "verdict": "VERIFIED" if c1_mc["pass"] else "FALSIFIED",
+    }
+
+    # ---- Claim 2: Theorem 4.1 Pareto-optimal terms ----
+    c2 = sc.claim2_pareto([(2, True, 1), (2, True, 2), (4, True, 1),
+                           (3, False, 1), (3, False, 2), (4, False, 1), (2, False, 2)])
+    results["claim_2"] = {
+        "statement": "Pareto-optimal terms of Y_s are p^{Q(n,sD)} H^n sigma^{...} (Thm 4.1).",
+        "check": c2,
+        "verdict": "VERIFIED" if c2["all_match"] else "FALSIFIED",
+    }
+
+    # ---- Claim 3: NTK regime on B-C (ASYM) + Prop 8.2 SYM nu=2 staticity ----
+    c3 = sc.claim3_ntk_symbolic()
+    results["claim_3"] = {
+        "statement": "NTK regime appears on B-C (ASYM); Prop 8.2: SYM nu=2 NTK is "
+                     "static iff the model is static (no NTK limit in SYM).",
+        "symbolic_check": c3,
+        "verdict": "VERIFIED" if c3["prop_8_2_pass"] else "FALSIFIED",
+    }
+
+    # ---- Claim 4: mean-field scaling sigma^2 ~ 1/H (SYM) , ~ 1/H^{2/nu} (ASYM) ----
+    c4 = sc.claim4_meanfield()
+    results["claim_4"] = {
+        "statement": "Mean-field init variance: sigma^2 ~ 1/H (SYM) , ~ 1/H^{2/nu} (ASYM).",
+        "check": c4,
+        "verdict": "VERIFIED" if c4["pass"] else "FALSIFIED",
+    }
+
+    # ---- Claim 5: SYM nu=2 closed form (eq:loss-narayana) ----
+    c5 = sc.claim5_nu2_symbolic()
+    results["claim_5"] = {
+        "statement": "SYM nu=2 closed-form E[L(t)] (eq:loss-narayana), all scalings.",
+        "symbolic_check": c5,
+        "verdict": "VERIFIED" if c5["pass"] else "FALSIFIED",
+    }
+
+    # ---- Claim 6: SYM nu=4 ascent threshold (eq:nu4-threshold) ----
+    c6 = sc.claim6_nu4_threshold()
+    results["claim_6"] = {
+        "statement": "SYM nu=4 ascent converges iff p^3 sigma^4 < rho* (eq:nu4-threshold).",
+        "symbolic_check": c6,
+        "verdict": "VERIFIED" if c6["pass"] else "FALSIFIED",
+    }
+
+    # ---- Optional numerical GF corroboration (claims 3b, 5, 6) ----
+    if GF_ENABLED:
+        import gf_experiments as gf
+        print("[gate] running GF corroboration: claim5 (SYM nu=2 loss curve)...", flush=True)
+        results["gf_claim_5"] = gf.claim5_numerical(str(ROOT / "outputs/gf"))
+        print("[gate] GF claim3b (SYM nu=2 NTK drift)...", flush=True)
+        results["gf_claim_3b"] = gf.claim3b_numerical(str(ROOT / "outputs/gf"))
+        print("[gate] GF claim6 (SYM nu=4 ascent boundary)...", flush=True)
+        results["gf_claim_6"] = gf.claim6_numerical(str(ROOT / "outputs/gf"))
+
+    verdicts = {k: results[k]["verdict"] for k in
+                ("claim_1", "claim_2", "claim_3", "claim_4", "claim_5", "claim_6")}
+    results["verdicts"] = verdicts
+    results["verified_claims"] = sum(1 for v in verdicts.values() if v == "VERIFIED")
+    results["falsified_claims"] = sum(1 for v in verdicts.values() if v == "FALSIFIED")
+    results["runtime_sec"] = round(time.time() - t0, 2)
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(results, indent=2, default=str) + "\n")
+    print(json.dumps({"verdicts": verdicts,
+                      "verified": results["verified_claims"],
+                      "falsified": results["falsified_claims"],
+                      "runtime_sec": results["runtime_sec"]}, indent=2))
+    # fail-closed: any non-VERIFIED core claim is a nonzero exit
+    if any(v != "VERIFIED" for v in verdicts.values()):
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
