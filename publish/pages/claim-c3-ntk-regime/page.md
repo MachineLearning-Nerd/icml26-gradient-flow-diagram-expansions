@@ -1,5 +1,7 @@
 # Claim C3 — NTK regime (Sec. 4, 8; Propositions 8.1, 8.2)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > An NTK-like (feature-frozen) regime appears only at points/edge B-C of the Pareto polygon
 > in ASYM (Prop 8.1: for T~eta^-1 H sigma^{2nu-2}, the NTK converges to the identity tensor
@@ -61,4 +63,4 @@ Raw sweep data: `outputs/gf/claim6_nu4_ascent.csv`
 
 
 ## Verdict
-**VERIFIED**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).
+**FINITE CONTRACT PASS**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).

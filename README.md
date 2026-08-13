@@ -1,62 +1,163 @@
-# Gradient Flow Through Diagram Expansions — reproduction
-
-## Reproduction summary (ICML 2026, `BXE3Z0EHCs` / arXiv [2602.04548](https://arxiv.org/abs/2602.04548))
-
-**Claim tested:** the paper's six theorem/closed-form anchors — (C1) Theorem 3.1 polynomiality of
-loss-expansion coefficients, (C2) Theorem 4.1 Pareto-optimal terms, (C3) the NTK-regime
-classification + Proposition 8.2 SYM-ν=2 kernel staticity, (C4) mean-field init-variance scaling,
-(C5) the SYM ν=2 closed-form loss (eq:loss-narayana), (C6) the SYM ν=4 ascent threshold
-(eq:nu4-threshold).
-
-**What was done:** an **independent from-scratch reconstruction** of the paper's diagram calculus
-(merge `⋆` + Wick contraction), yielding the exact `Y_s` polynomials whose Pareto fronts match
-Theorem 4.1 *without the formula being imported*, validated against the raw loss/gradient
-definition by Monte-Carlo (<0.6% relerr), and corroborated by direct numerical gradient-flow
-simulation (the paper's own experiments). The previous judged revision (0/12) was a vacuous stub;
-this replaces it.
-
-**Paper number vs observed:**
-| Quantity | Paper / source | Observed (this repro) |
-|---|---|---|
-| ν=2 limiting loss | `max((p-H)/2, 0)` | derived symbolically + reached by GF |
-| ν=2 loss curve vs `eq:loss-narayana` | closed form | GF matches to <1% mean relerr (p=256) |
-| ν=4 threshold `ρ*` (θ=1) | `1/(-16θ∫₀^{-∞}F³)` | **2.0778** (F quadrature vs erfc agree 1.0e-14); old stub's 0.592 was a coarse-quadrature artefact |
-| mean-field scaling | σ²∼1/H (SYM), ∼1/H^{2/ν} (ASYM) | derived from Pareto-front dominance |
-
-**Downscaling / substitutions:** CPU-only budget. Numerical GF uses p=256 (ν=2) and p=32 (ν=4)
-vs the paper's p=512/256 — the symbolic verdicts are scale-independent. No GPU used.
-
-**Agreed compute:** local CPU for short symbolic checks (≤1 core, <5 min); Hugging Face
-`cpu-upgrade` for the multi-core/uncertain GF corroboration.
-
-**Detailed report:** [`reports/diagram-expansion-gradient-flow/report.md`](reports/diagram-expansion-gradient-flow/report.md).
-**Live logbook (judge surface):** https://huggingface.co/spaces/DineshAI/BXE3Z0EHCs
-**Tutorial notebook:** [`notebooks/diagram_expansion_tutorial.py`](notebooks/diagram_expansion_tutorial.py)
-[![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/MachineLearning-Nerd/icml26-repro-BXE3Z0EHCs-diagram-expansion-gradient-flow/blob/main/notebooks/diagram_expansion_tutorial.py)
-(local: `uvx marimo edit notebooks/diagram_expansion_tutorial.py`)
-
-### Experiment log
-
-| Branch / experiment | Purpose | Exact run command | Outcome | Compute |
-|---|---|---|---|---|
-| [`orx/symbolic-reconstruction-baseline`](https://github.com/MachineLearning-Nerd/icml26-repro-BXE3Z0EHCs-diagram-expansion-gradient-flow/tree/orx/symbolic-reconstruction-baseline) | independent symbolic reconstruction of all six anchors | `uv run python repro/src/run_publication_gate.py` | 6/6 VERIFIED, gate passed | local CPU, ~1.5 min |
-| [`orx/gf-corroboration`](https://github.com/MachineLearning-Nerd/icml26-repro-BXE3Z0EHCs-diagram-expansion-gradient-flow/tree/orx/gf-corroboration) | adds numerical GF corroboration (flips `run_config.GF_ENABLED`) | `uv run python repro/src/run_publication_gate.py` | 6/6 VERIFIED, gate passed | HF cpu-upgrade, ~34 min |
-| `main` | publication surface (this README + report + notebook) | _Not run as an experiment (publication surface)_ | — | — |
-
-`main` is presentation-only; it is not an experiment node.
-
-### Quick local check
-
-```bash
-uv sync
-uv run python repro/src/run_publication_gate.py   # all 6 VERIFIED, ~40s, CPU
-```
-
+---
+title: "ICML 2026 — Gradient Flow Through Diagram Expansions"
+emoji: "🌀"
+colorFrom: blue
+colorTo: purple
+sdk: static
+pinned: false
+tags:
+  - icml2026-repro
+  - paper-BXE3Z0EHCs
+  - source-pinned
+  - finite-audit
 ---
 
-# Gradient Flow Through Diagram Expansions
+# ICML 2026 — Gradient Flow Through Diagram Expansions
 
-CPU-only, source-pinned analytic certificate for ICML 2026 OpenReview
-`BXE3Z0EHCs` / arXiv:2602.04548. The release supplies TeX and figures only,
-so this repository checks the six closed-form theorem anchors and explicitly
-does not substitute an unreleased author implementation.
+Independent, CPU-only, source-pinned finite audit for:
+
+> Dmitry Yarotsky, Eugene Golikov, and Yaroslav Gusev. “Gradient Flow Through
+> Diagram Expansions: Learning Regimes and Explicit Solutions.”
+> [arXiv:2602.04548v2](https://arxiv.org/abs/2602.04548v2).
+> OpenReview: [BXE3Z0EHCs](https://openreview.net/forum?id=BXE3Z0EHCs).
+
+Repository name: `icml26-gradient-flow-diagram-expansions`
+
+## Current status
+
+**Overall: INCONCLUSIVE.** The canonical branch contains six independent,
+source-pinned finite contracts. All six pass, but that does not independently
+prove the paper’s universal diagram-expansion, scaling-regime, closed-form, or
+gradient-flow claims.
+
+| Layer | Result | Meaning |
+| --- | --- | --- |
+| Finite contract checks | 6/6 pass | Source anchors, symbolic reconstructions, finite comparisons, numerical corroboration, and declared checks pass. |
+| Paper-level claims | 0/6 independently verified | Finite grids, Monte Carlo, and reduced-scale GF runs do not establish universal limits or theorem quantifiers. |
+| Consolidated status | INCONCLUSIVE | This is reproducible finite evidence, not a formal proof certificate. |
+
+The raw `outputs/verification.json` uses `VERIFIED` for finite
+producer verdicts. The consolidated gate in `publication_gate.json`
+renames those outcomes `FINITE_CONTRACT_PASS` and reports the
+paper-level boundary separately.
+
+The local source archive is pinned to SHA-256
+`6c470ad469118a8bd3b61f82b3456d95169c0581bce9284a0d68b13b8e37ca9b`.
+The public arXiv record is currently v2; the local archive remains identified
+by its hash for exact reproducibility.
+
+## What the paper does
+
+The paper develops a diagram-expansion framework for gradient-flow dynamics in
+large learning problems. It studies scaling regimes for tensor
+Canonical Polyadic decomposition, including lazy/NTK and mean-field behavior,
+and derives explicit solutions in selected symmetric settings. The repository
+reconstructs selected diagram and formula checks and adds reduced-scale
+gradient-flow corroboration.
+
+## Claim ledger: producer → evidence → boundary
+
+The main producer is `repro/src/verify_diagram_flow.py`. Its symbolic
+subroutines live in `repro/src/diagrams.py` and
+`repro/src/symbolic_checks.py`; optional numerical corroboration is
+produced by `repro/src/gf_experiments.py`. The fixed runner is
+`repro/src/run_publication_gate.py`.
+
+| Claim | Paper object | Evidence producer and check | Boundary |
+| --- | --- | --- | --- |
+| C1 | Theorem 3.1 polynomiality | Diagram reconstruction plus exact polynomial checks and Monte Carlo comparison; maximum recorded relative error is about 0.0057. | Finite reconstruction and MC validation; not a universal proof. |
+| C2 | Theorem 4.1 Pareto terms | Computed finite fronts are compared with the source formula across selected symmetric/asymmetric `nu` and order settings. | Finite front comparison; not the full theorem over all parameters. |
+| C3 | NTK regime and Proposition 8.2 | Symbolic NTK/staticity checks, with optional GF drift corroboration. | Selected symbolic identities and trajectories; not a proof of all regime classifications. |
+| C4 | Mean-field initialization scaling | Finite checks of `sigma^2 ~ 1/H` and `sigma^2 ~ 1/H^{2/nu}` for selected widths/orders. | Scaling examples; not a universal asymptotic derivation. |
+| C5 | Symmetric `nu=2` closed form | Narayana/limit symbolic checks plus optional reduced-scale GF curve comparison. | Finite symbolic and numerical agreement; not an independent derivation of every limiting step. |
+| C6 | Symmetric `nu=4` ascent threshold | Independent quadrature/erfc agreement at about `1.0e-14`, `rho*` near 2.0778 for `theta=1`, and reduced-scale `p=32` GF bracketing. | Reduced-scale corroboration; finite-size effects remain and the theorem is not independently proved. |
+
+A contract passes when the pinned source anchors and declared finite checks pass.
+The raw label `VERIFIED` should therefore be read as “finite contract
+pass,” not “paper theorem verified.”
+
+## Reproduce
+
+Install the locked environment:
+
+```bash
+uv sync --frozen
+```
+
+Fast symbolic verification without the heavy gradient-flow campaign:
+
+```bash
+uv run python repro/src/verify_diagram_flow.py --no-gf
+```
+
+Full publication gate, including the configured GF corroboration:
+
+```bash
+uv run python repro/src/run_publication_gate.py
+```
+
+The GF run is CPU-intensive. Existing raw GF outputs are retained under
+`outputs/gf/` and `publish/outputs/gf/`; no GPU result is
+claimed.
+
+## Limitations
+
+- Universal diagram-expansion and asymptotic statements are not established by
+  finite symbolic grids, Monte Carlo, or reduced-scale simulations.
+- GF corroboration uses reduced sizes, including `p=256` for `nu=2`
+  and `p=32` for `nu=4`, versus larger paper settings.
+- The `nu=4` transition has a documented finite-size preemption near the
+  threshold.
+- Historical `VERIFIED` labels in raw Trackio/Hugging Face artifacts
+  describe finite checks only.
+- The source archive and outputs are preserved for reproducibility; changing the
+  arXiv source requires a new hash and audit.
+
+## Branches
+
+`main` is the canonical publication branch. The substantive historical
+branches have been integrated into it:
+
+| Historical branch | Role |
+| --- | --- |
+| `orx/symbolic-reconstruction-baseline` | Added the independent diagram calculus, symbolic checks, and six finite anchors. |
+| `orx/gf-corroboration` | Added GF experiments, reduced-scale outputs, and the corrected ν=4 quadrature/threshold implementation. |
+
+The branch cleanup retains the integrated code and deletes the historical remote
+branches. See [BRANCH_AUDIT.md](BRANCH_AUDIT.md) for live verification.
+
+## Repository map
+
+- `repro/src/diagrams.py`: diagram operations and symbolic reconstruction.
+- `repro/src/symbolic_checks.py`: six claim-level finite checks.
+- `repro/src/gf_experiments.py`: optional numerical GF corroboration.
+- `repro/src/verify_diagram_flow.py`: source-pinned verifier.
+- `repro/src/run_publication_gate.py`: full gate runner.
+- `outputs/`: raw verification and GF outputs.
+- `publish/`: publication bundle and preserved historical pages.
+- `reports/`: detailed finite audit report.
+- `notebooks/`: explanatory tutorial.
+- `source/`: pinned paper archive.
+- `STATUS.md`, `GATE_READY.md`, and
+  `BRANCH_AUDIT.md`: status, gate, and lineage.
+
+## Citation
+
+```bibtex
+@article{yarotsky2026gradient,
+  title   = {Gradient Flow Through Diagram Expansions: Learning Regimes and Explicit Solutions},
+  author  = {Yarotsky, Dmitry and Golikov, Eugene and Gusev, Yaroslav},
+  journal = {arXiv preprint arXiv:2602.04548},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2602.04548v2}
+}
+```
+
+## Thank you and attribution
+
+Thank you to Dmitry Yarotsky, Eugene Golikov, and Yaroslav Gusev for making this
+mathematical work available for careful study and reproducibility analysis. This
+repository is an independent finite audit, not an official implementation or
+endorsement by the authors.
+
+Maintained by [MachineLearning-Nerd](https://github.com/MachineLearning-Nerd).

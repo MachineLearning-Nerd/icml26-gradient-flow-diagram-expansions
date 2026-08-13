@@ -1,5 +1,8 @@
 # Overview
 
+**Status: 6/6 finite contracts pass; 0/6 paper-level claims independently
+verified; overall INCONCLUSIVE.**
+
 This logbook reproduces the six theorem/closed-form anchors of *Gradient Flow Through
 Diagram Expansions* (arXiv:2602.04548) by **independent symbolic reconstruction** of the
 paper's diagram calculus, Pareto-front analysis, NTK relations, nu=2 closed form, and nu=4
@@ -16,5 +19,5 @@ The engine is independently checked against the raw loss/gradient definition by 
 (exact rationals) -> Monte-Carlo validation (<0.6% relerr) -> closed-form verification
 (Narayana g.f.; F via erfc cross-check at 1e-14) -> numerical GF corroboration.
 
-**Experiment tree:** baseline `symbolic-reconstruction-baseline` (local, all 6 VERIFIED,
+**Experiment tree:** baseline `symbolic-reconstruction-baseline` (local, all 6 finite contracts pass,
 SHA `9ebb04c`) -> child `gf-corroboration` (HF cpu-upgrade, numerical GF).

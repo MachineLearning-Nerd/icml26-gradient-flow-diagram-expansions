@@ -1,7 +1,7 @@
 [project]
 name = "bxe3z0ehcs-repro"
 version = "0.2.0"
-description = "Source-pinned reproduction of 'Gradient Flow Through Diagram Expansions' (arXiv:2602.04548, OpenReview BXE3Z0EHCs). Independent symbolic reconstruction of the diagram calculus, Pareto front, NTK/static-kernel relations, nu=2 closed form, and nu=4 threshold, plus numerical gradient-flow corroboration."
+description = "Independent source-pinned finite audit of 'Gradient Flow Through Diagram Expansions' (arXiv:2602.04548, OpenReview BXE3Z0EHCs), with symbolic checks and reduced-scale gradient-flow corroboration."
 requires-python = ">=3.11,<3.13"
 dependencies = [
     "numpy>=1.26,<3.0",

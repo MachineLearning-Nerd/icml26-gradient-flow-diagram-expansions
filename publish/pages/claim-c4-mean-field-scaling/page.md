@@ -1,5 +1,7 @@
 # Claim C4 — mean-field init-variance scaling (Sec. 4)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > Mean-field (feature-evolving) regimes require sigma^2 ~ 1/H (symmetric case, edge B-E) or
 > sigma^2 ~ 1/H^{2/nu} (asymmetric case, edge C-D). (Sec. 4; for nu=2 these coincide.)
@@ -20,5 +22,5 @@
 | ASYM nu=4 (edge C-D) | H sigma^nu ~ 1 | 1/sqrt(H) | -1/2 |
 
 ## Verdict
-**VERIFIED** — SYM nu=2 gives sigma^2 ~ 1/H; ASYM gives sigma^2 ~ 1/H^{2/nu} for nu=2,3,4.
+**FINITE CONTRACT PASS** — SYM nu=2 gives sigma^2 ~ 1/H; ASYM gives sigma^2 ~ 1/H^{2/nu} for nu=2,3,4.
 Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).

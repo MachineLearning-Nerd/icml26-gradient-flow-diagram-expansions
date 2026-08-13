@@ -1,5 +1,7 @@
 # Claim C2 — Pareto-optimal terms (Theorem 4.1)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > Up to nonzero numerical coefficients, the Pareto-optimal terms in Y_s are
 > `p^{Q(n,sD)} H^n sigma^{nu(sD+1)+(nu-2)s}`, `0<=sD<=s+1`, `1<=n<=sD+1`, with
@@ -27,4 +29,4 @@ re-derived as `predicted_pareto_terms` and checked against the independently *co
 **All 7 cases match exactly** (`all_match: True`).
 
 ## Verdict
-**VERIFIED**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).
+**FINITE CONTRACT PASS**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).

@@ -1,5 +1,7 @@
 # Claim C5 — SYM nu=2 closed-form loss (Sec. 9, eq:loss-narayana)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > `E[L(t)] ~ p/2 + p^2 sigma^2 Psi(-t/T, H/p, p sigma^2)`, with
 > `Psi(x,y,z) = (z e^{-4x}/2 d_1 h(z(1-e^{-4x}),y) - h(z(1-e^{-4x}),y)) e^{-4x}`,
@@ -34,4 +36,4 @@ Raw curve data: `outputs/gf/claim5_nu2_curves.csv`
 
 
 ## Verdict
-**VERIFIED**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).
+**FINITE CONTRACT PASS**. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).

@@ -1,5 +1,7 @@
 # Claim C1 — polynomial coefficients (Theorem 3.1)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > Suppose the target tensor F can be written as a polynomial in H, p, indices and
 > Kronecker deltas. Then, for any s, **T^s E[d^s L/dt^s(0)] is a polynomial in H, p, sigma^2**.
@@ -39,5 +41,5 @@ in H,p,deltas) is not covered; the construction's polynomiality depends on the d
 of index sums. The MC agreement above confirms the engine computes the paper's quantity.
 
 ## Verdict
-**VERIFIED** — reconstructed as exact polynomials; engine matches the raw definition to
+**FINITE CONTRACT PASS** — reconstructed as exact polynomials; engine matches the raw definition to
 0.57%. Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).

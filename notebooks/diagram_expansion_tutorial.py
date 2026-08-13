@@ -19,12 +19,13 @@ def _(marimo):
         Reproduction of Yarotsky, Golikov & Gusev (arXiv [2602.04548](https://arxiv.org/abs/2602.04548),
         OpenReview `BXE3Z0EHCs`).
 
-        **Central result (reproduced).** For the symmetric rank-$H$ CP-decomposition of the
+        **Finite audit result.** For the symmetric rank-$H$ CP-decomposition of the
         identity matrix, the expected gradient-flow loss has the closed form
         $\\mathbb{E}[L(t)] \\sim p/2 + p^2\\sigma^2\\,\\Psi(-t/T, H/p, p\\sigma^2)$ (paper, Sec. 9),
         and it converges to $\\max((p-H)/2,\\,0)$. The figure below is the headline evidence from the
-        reproduction: direct gradient-flow simulation (solid) vs the independently evaluated closed
-        form (dashed), agreeing to <1%.
+        reproduction: direct reduced-scale gradient-flow simulation (solid) vs the independently
+        evaluated closed form (dashed), agreeing to <1% on the recorded cells. This is finite
+        corroboration, not an independent proof of the limiting formula.
         """
     )
     return
@@ -109,8 +110,9 @@ def _(marimo):
     marimo.md(
         """
         ---
-        **Verdict (full reproduction):** all six theorem/closed-form anchors **VERIFIED** by
-        independent symbolic reconstruction, corroborated by numerical gradient flow. Details:
+        **Verdict (finite audit):** all six source-pinned finite contracts pass. The consolidated
+        paper-level status is **INCONCLUSIVE**: 0/6 claims are independently verified as theorems.
+        Details:
         [report](https://github.com/MachineLearning-Nerd/icml26-repro-BXE3Z0EHCs-diagram-expansion-gradient-flow/blob/main/reports/diagram-expansion-gradient-flow/report.md)
         · [HF logbook](https://huggingface.co/spaces/DineshAI/BXE3Z0EHCs).
         Run locally: `uv run python repro/src/run_publication_gate.py`.

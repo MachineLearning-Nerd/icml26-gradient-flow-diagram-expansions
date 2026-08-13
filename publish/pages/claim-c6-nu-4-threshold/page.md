@@ -1,5 +1,7 @@
 # Claim C6 — SYM nu=4 ascent threshold (Sec. 10, eq:nu4-threshold)
 
+**Finite contract status: PASS. Paper-level status: not independently verified.**
+
 ## Exact claim (source-quoted)
 > For SYM nu=4 with gradient ascent, the solution exists for all tau<=0 (low-noise,
 > convergent) iff `p^3 sigma^4 < rho* = 1/(-16 theta int_0^{-inf} F(u)^3 du)`,
@@ -40,4 +42,4 @@ Raw sweep data: `outputs/gf/claim6_nu4_ascent.csv`
 
 
 ## Verdict
-**VERIFIED** (threshold formula and the integral it rests on). Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).
+**FINITE CONTRACT PASS** (threshold formula and the integral it rests on). Command `uv run python repro/src/run_publication_gate.py`; uv, Python 3.12, numpy 2.5, scipy 1.18, sympy 1.14, matplotlib 3.11 (pyproject.toml + uv.lock pinned).
